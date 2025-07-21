@@ -28,8 +28,6 @@ module JavaBuildpack
     class ContrastSecurityAgent < JavaBuildpack::Component::VersionedDependencyComponent
       include JavaBuildpack::Util
 
-      # TODO: REMOVE
-      # TEMP Fetch the logger for debugging when deploying an app
       def initialize(context)
         super(context)
         @logger = JavaBuildpack::Logging::LoggerFactory.instance.get_logger ContrastSecurityAgent
@@ -132,16 +130,10 @@ module JavaBuildpack
         credentials.each do |key, value|
           matched = key.match?(/^CONTRAST__/)
           add_env_var env_vars, key, value if matched
-          @logger.warn do
-            'Checking environment variable: ' + key + ' = ' + value.to_s + ', matched= ' + matched.to_s
-          end
         end
       end
 
       def add_env_var(env_vars, key, value)
-        @logger.warn do
-          'Adding environment variable: ' + key + ':' + value.to_s
-        end
         env_vars.add_environment_variable key, value
       end
 
