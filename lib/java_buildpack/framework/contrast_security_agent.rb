@@ -128,7 +128,8 @@ module JavaBuildpack
       # buildpack
       def process_extra_env_vars(credentials, env_vars)
         credentials.each do |key, value|
-          matched = key.match?(/^CONTRAST__/)
+          # Add any that start with CONTRAST__ AND non-empty values
+          matched = key.match?(/^CONTRAST__/) && !value.to_s.empty?
           add_env_var env_vars, key, value if matched
         end
       end

@@ -181,7 +181,9 @@ describe JavaBuildpack::Framework::ContrastSecurityAgent do
                                                                               'api_key' => 'api_key_test',
                                                                               'service_key' => 'service_key_test',
                                                                               # Test nil and empty values
-                                                                              'proxy_host' => nil })
+                                                                              'proxy_host' => nil,
+                                                                              'CONTRAST__IGNORE_01' => '',
+                                                                              'CONTRAST__IGNORE_02' => nil })
     end
 
     it 'proxy settings handle nil and empty' do
@@ -194,6 +196,8 @@ describe JavaBuildpack::Framework::ContrastSecurityAgent do
       expect(env_var_str).not_to include('CONTRAST__API__PROXY__PORT')
       expect(env_var_str).not_to include('CONTRAST__API__PROXY__USER')
       expect(env_var_str).not_to include('CONTRAST__API__PROXY__PASS')
+      expect(env_var_str).not_to include('CONTRAST__IGNORE_01')
+      expect(env_var_str).not_to include('CONTRAST__IGNORE_02')
     end
 
   end
