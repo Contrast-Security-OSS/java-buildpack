@@ -89,8 +89,9 @@ module JavaBuildpack
       end
 
       def appname_exist?
-        @droplet.java_opts.any? { |java_opt| java_opt =~ /contrast.override.appname/ } ||
-          @droplet.java_opts.any? { |java_opt| java_opt =~ /contrast.application.name/ }
+        @droplet.java_opts.any? do |java_opt|
+          java_opt =~ /contrast\.override\.appname/ || java_opt =~ /contrast\.application\.name/
+        end
       end
 
       def contrast_config
@@ -139,20 +140,20 @@ module JavaBuildpack
       end
 
       def add_proxy_config(credentials, env_vars)
-        host_set = credentials_value_set(credentials, 'proxy_host')
+        host_set = credentials_value_set?(credentials, 'proxy_host')
         add_env_var env_vars, 'CONTRAST__API__PROXY__HOST', credentials['proxy_host'] if host_set
 
-        port_set = credentials_value_set(credentials, 'proxy_port')
+        port_set = credentials_value_set?(credentials, 'proxy_port')
         add_env_var env_vars, 'CONTRAST__API__PROXY__PORT', credentials['proxy_port'] if port_set
 
-        pass_set = credentials_value_set(credentials, 'proxy_pass')
+        pass_set = credentials_value_set?(credentials, 'proxy_pass')
         add_env_var env_vars, 'CONTRAST__API__PROXY__PASS', credentials['proxy_pass'] if pass_set
 
-        user_set = credentials_value_set(credentials, 'proxy_user')
+        user_set = credentials_value_set?(credentials, 'proxy_user')
         add_env_var env_vars, 'CONTRAST__API__PROXY__USER', credentials['proxy_user'] if user_set
       end
 
-      def credentials_value_set(credentials, key)
+      def credentials_value_set?(credentials, key)
         !credentials[key].to_s.empty?
       end
 
