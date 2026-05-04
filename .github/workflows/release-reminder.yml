@@ -12,6 +12,11 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.bool }}
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        with:
+          egress-policy: audit
+
       - name: Should run
         id: should_run
         run: |
@@ -42,6 +47,11 @@ jobs:
     needs: [ determine-date ]
     if: ${{ needs.determine-date.outputs.should_run == 'true' }}
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        with:
+          egress-policy: audit
+
       - name: Get Date
         id: date
         run: |
@@ -52,7 +62,7 @@ jobs:
           echo "window_close_date=$window_close_date" >> "${GITHUB_OUTPUT}"
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           token: ${{ secrets.CF_BOT_GITHUB_TOKEN }}
           fetch-depth: 0
@@ -71,7 +81,7 @@ jobs:
 
       - name: File Issue
         id: file-issue
-        uses: paketo-buildpacks/github-config/actions/issue/file@main
+        uses: paketo-buildpacks/github-config/actions/issue/file@94b73877cdf1df138db21159809bae9653a267cf # main
         with:
           token: ${{ secrets.CF_BOT_GITHUB_TOKEN }}
           repo: ${{ github.repository }}
@@ -83,7 +93,7 @@ jobs:
 
       - name: Add issue to project
         id: issue-to-proj
-        uses: paketo-buildpacks/github-config/actions/issue/add-to-project@main
+        uses: paketo-buildpacks/github-config/actions/issue/add-to-project@94b73877cdf1df138db21159809bae9653a267cf # main
         with:
           # CF buildpacks project - https://github.com/orgs/cloudfoundry/projects/37
           project-org: cloudfoundry
